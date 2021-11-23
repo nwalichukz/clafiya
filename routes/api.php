@@ -17,3 +17,4 @@ use App\Http\Controllers\AuthController;
 
 Route::post('user/create', [AuthController::class, 'create']);
 Route::post('user/login', [AuthController::class, 'login']);
+Route::get('user/get/{user_id?}', [AuthController::class, 'get']);

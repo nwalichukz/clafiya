@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use Validator;
+use Validator, Auth;
 class AuthController extends Controller
 {
     /**
@@ -90,7 +90,7 @@ class AuthController extends Controller
     ];
     if(Auth::attempt($credentials)){
         
-        $token = Auth()->user()->createToken('yourPass')->accessToken;
+        $token = Auth()->user()->createToken('YourPass')->accessToken;
         return response()->json([
             'status' => 200,
             'message' => 'Login successful',
@@ -105,6 +105,27 @@ class AuthController extends Controller
             'message' => 'Invalid login details',
         ]);
     }
+    }
+
+     /**
+     *  returns user(s)
+     * 
+     * @param $id
+     * 
+     * @return collection
+     * 
+     */
+    public static function get($id = null){
+        if(!empty($id)){
+    		return $data = User::where('id', $id)->first();
+    	}elseif(empty($id)){
+    		  return $data = User::whereNotNull('id')->paginate(20);
+	    	}else{
+          return response()->json([
+            'status' => 403,
+            'message' => 'Something went wrong, user could not be retrieved'
+            ]);
+        }
     }
 
 }
